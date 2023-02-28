@@ -11,6 +11,8 @@ np.set_printoptions(threshold=sys.maxsize)
 Swap = Id(2).swap(1, 1)
 
 
+
+
 class Z(Spider):
     """ Z spider. """
     def __init__(self, n_legs_in, n_legs_out, phase=0):
