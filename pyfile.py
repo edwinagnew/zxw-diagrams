@@ -8,6 +8,8 @@ import tensornetwork as tn
 
 np.set_printoptions(threshold=sys.maxsize)
 
+Swap = Id(2).swap(1, 1)
+
 
 class Z(Spider):
     """ Z spider. """
@@ -50,18 +52,20 @@ class W(Spider):
     @property
     def array(self):
         # |0..0><0| + (|10..> + |01..> + ...)<1|
-        n = len(self.cod)
+        n = self.n
         
         array = np.zeros(2 ** (1 + n))
         array[0] = 1.0
         for j in one_hots(n):
 
-            array[2**n + int(j, 2)] = 1
+            if self.mon:
+                array[2**n + int(j, 2)] = 1
+            else:
+                array[2 * int(j, 2) + 1] = 1
             
         if self.mon:
             return Tensor(Dim(2), Dim(2)**n, array)
         else:
-            array[2 * int(j, 2) + 1] = 1 !!
             return Tensor(Dim(2)**n, Dim(2), array)
     
     def T(self):
