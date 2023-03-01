@@ -24,6 +24,27 @@ class Z(Spider):
         array[-1] = np.exp(1j * self.phase)
         return Tensor(Dim(2) ** n, Dim(2) ** m, array)
     
+def bitstring(x):
+    return [int(b) for b in "{0:b}".format(x)]
+    
+class X(Spider):
+    """ X spider. """
+    def __init__(self, n_legs_in, n_legs_out, phase=0):
+        super().__init__(n_legs_in, n_legs_out, phase, name='X')
+        self.color = "red"
+
+    @property
+    def array(self):
+        assert self.phase in (0, 0.5)
+        n, m = len(self.dom), len(self.cod)
+        array = np.zeros(1 << (n + m), dtype=complex)
+        bit = 1 if self.phase == 0.5 else 0
+        for i in range(len(array)):
+            parity = (bitstring(i).count(1) + bit) % 2
+            array[i] = 1 - parity
+        return Tensor(Dim(2) ** n, Dim(2) ** m, array)
+       
+    
     
 def one_hots(n):
     zeros = '0'*n
