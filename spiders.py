@@ -24,6 +24,22 @@ class Z(Spider):
         array[-1] = np.exp(1j * self.phase)
         return Tensor(Dim(2) ** n, Dim(2) ** m, array)
     
+    
+class ZBox(Spider):
+    """ Green box. """
+    def __init__(self, n_legs_in, n_legs_out, phase=0):
+        super().__init__(n_legs_in, n_legs_out, phase, name='ZBox')
+        self.color = "green"
+        self.shape = 'rectangle'
+
+    @property
+    def array(self):
+        n, m = len(self.dom), len(self.cod)
+        array = np.zeros(1 << (n + m), dtype=complex)
+        array[0] = 1
+        array[-1] = self.phase
+        return Tensor(Dim(2) ** n, Dim(2) ** m, array)
+    
 def bitstring(x):
     return [int(b) for b in "{0:b}".format(x)]
     
