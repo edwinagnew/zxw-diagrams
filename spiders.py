@@ -40,6 +40,11 @@ class ZBox(Spider):
         array[-1] = self.phase
         return Tensor(Dim(2) ** n, Dim(2) ** m, array)
     
+def box_states(ps):
+    if len(ps) == 1:
+        return ZBox(0, 1, ps[0])
+    return ZBox(0, 1, ps[0]) @ box_states(ps[1:])
+    
 def bitstring(x):
     return [int(b) for b in "{0:b}".format(x)]
     
@@ -62,7 +67,7 @@ class X(Spider):
        
     
     
-def one_hots(n):
+def one_hots(n): # could have just used powers of 2 lol
     zeros = '0'*n
     strings = []
     for i in range(n):
@@ -72,11 +77,11 @@ def one_hots(n):
 class W(Spider):
     def __init__(self, n=2, mon=True):
         if mon:
-            super().__init__(1, n) # assume 1 in for now 
+            super().__init__(1, n, 0, name='W') # assume 1 in for now 
             self.color = "black" 
             self.shape = "triangle_up"
         else:
-            super().__init__(n, 1)
+            super().__init__(n, 1, 0, name='W')
             self.color = "black" 
             self.shape = "triangle_down"
             
@@ -104,7 +109,8 @@ class W(Spider):
         else:
             return Tensor(Dim(2)**n, Dim(2), array)
     
-    def T(self):
+  
+    def dagger(self):
         return type(self)(n=self.n, mon=not self.mon)
     
     
