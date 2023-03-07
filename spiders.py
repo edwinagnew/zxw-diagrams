@@ -40,10 +40,10 @@ class ZBox(Spider):
         array[-1] = self.phase
         return Tensor(Dim(2) ** n, Dim(2) ** m, array)
     
-def box_states(ps):
+def boxes(ps, states=True):
     if len(ps) == 1:
-        return ZBox(0, 1, ps[0])
-    return ZBox(0, 1, ps[0]) @ box_states(ps[1:])
+        return ZBox(int(not states), 1, ps[0])
+    return ZBox(int(not states), 1, ps[0]) @ boxes(ps[1:], states=states)
     
 def bitstring(x):
     return [int(b) for b in "{0:b}".format(x)]
