@@ -15,13 +15,15 @@ class Z(Spider):
     def __init__(self, n_legs_in, n_legs_out, phase=0):
         super().__init__(n_legs_in, n_legs_out, phase, name='Z')
         self.color = "green"
+        
+        assert -2 <= phase <= 2, "phase should be multiple of pi"
 
     @property
     def array(self):
         n, m = len(self.dom), len(self.cod)
         array = np.zeros(1 << (n + m), dtype=complex)
         array[0] = 1.0
-        array[-1] = np.exp(1j * self.phase)
+        array[-1] = np.exp(1j * self.phase * np.pi)
         return Tensor(Dim(2) ** n, Dim(2) ** m, array)
     
     
@@ -31,6 +33,7 @@ class ZBox(Spider):
         super().__init__(n_legs_in, n_legs_out, phase, name='ZBox')
         self.color = "green"
         self.shape = 'rectangle'
+        
 
     @property
     def array(self):
@@ -51,15 +54,15 @@ def bitstring(x):
 class X(Spider):
     """ X spider. """
     def __init__(self, n_legs_in, n_legs_out, phase=0):
-        super().__init__(n_legs_in, n_legs_out, phase, name='X')
+        super().__init__(n_legs_in, n_legs_out, float(phase), name='X')
         self.color = "red"
 
     @property
     def array(self):
-        assert self.phase in (0, 0.5)
+        assert self.phase in (0, 1.0)
         n, m = len(self.dom), len(self.cod)
         array = np.zeros(1 << (n + m), dtype=complex)
-        bit = 1 if self.phase == 0.5 else 0
+        bit = 1 if self.phase == 1.0 else 0
         for i in range(len(array)):
             parity = (bitstring(i).count(1) + bit) % 2
             array[i] = 1 - parity
