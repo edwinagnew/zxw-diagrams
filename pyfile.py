@@ -26,7 +26,7 @@ def eval(diagram):
     n, m = len(diagram.dom), len(diagram.cod)
     #print(n, m, "\n")
     
-    return t.array.astype(complex).reshape(2**n, 2**m).transpose()
+    return np.round(t.array).astype(complex).reshape(2**n, 2**m).transpose()
     #return t.array.astype(float).reshape(dim, dim).transpose()
     
     

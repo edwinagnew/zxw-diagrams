@@ -16,14 +16,14 @@ class Z(Spider):
         super().__init__(n_legs_in, n_legs_out, phase, name='Z')
         self.color = "green"
         
-        assert -2 <= phase <= 2, "phase should be multiple of pi"
+        #assert -2 <= phase <= 2, "phase should be multiple of pi"
 
     @property
     def array(self):
         n, m = len(self.dom), len(self.cod)
         array = np.zeros(1 << (n + m), dtype=complex)
         array[0] = 1.0
-        array[-1] = np.exp(1j * self.phase * np.pi)
+        array[-1] = np.exp(1j * self.phase)
         return Tensor(Dim(2) ** n, Dim(2) ** m, array)
     
     
@@ -59,6 +59,7 @@ class X(Spider):
 
     @property
     def array(self):
+        
         assert self.phase in (0, 1.0)
         n, m = len(self.dom), len(self.cod)
         array = np.zeros(1 << (n + m), dtype=complex)
@@ -123,7 +124,7 @@ H.dagger = lambda: H
 H.draw_as_spider = True
 H.drawing_name, H.tikzstyle_name, = '', 'H'
 H.color, H.shape = "yellow", "rectangle"
-H.array = Tensor(Dim(2), Dim(2), 1/np.sqrt(1) * np.array([1.0, 1, 1, -1]))
+H.array = Tensor(Dim(2), Dim(2), 1/np.sqrt(2) * np.array([1.0, 1, 1, -1]))
 
 CZ = Z(1, 2) @ Id(1) >> Id(1) @ H @ Id(1) >> Id(1) @ Z(2, 1)
 
