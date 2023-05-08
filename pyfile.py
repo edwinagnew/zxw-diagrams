@@ -19,14 +19,17 @@ def f_ar(box):
     return tensor.Box(box.name, f_ob(box.dom), f_ob(box.cod), box.array)
 
 
-def eval(diagram):
+def eval(diagram, round=True):
     d = Functor(ob=f_ob, ar=f_ar, ar_factory=tensor.Diagram)(diagram)
     t = d.eval(contractor=tn.contractors.auto)
     
     n, m = len(diagram.dom), len(diagram.cod)
     #print(n, m, "\n")
     
-    return np.round(t.array).astype(complex).reshape(2**n, 2**m).transpose()
+    if round:
+        return np.round(t.array, 5).astype(complex).reshape(2**n, 2**m).transpose()
+    else:
+        return t.array.astype(complex).reshape(2**n, 2**m).transpose()
     #return t.array.astype(float).reshape(dim, dim).transpose()
     
     
