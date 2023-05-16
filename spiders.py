@@ -78,7 +78,19 @@ def one_hots(n): # could have just used powers of 2 lol
         strings.append('0'*i + '1' + '0'*(n-i-1))
     return strings
 
-class W(Spider):
+def w_mat(m, n):
+    mat = np.zeros((2**m, 2**n)) # rows, columns
+    for i in range(2**n - 1):
+        bi = format(i, '0' + str(n) + 'b')
+        if bi.count('0') == 1:
+            mat[0][i] = 1.0
+
+    for j in range(m): # all powers of 2 in final column
+        mat[2**j][-1] = 1.0
+
+    return mat
+
+class W_old(Spider):
     def __init__(self, n=2, mon=True, norm=False):
         self.norm_factor = 1.0 if not norm else 1/np.sqrt(n)
         
@@ -92,11 +104,7 @@ class W(Spider):
             self.shape = "triangle_down"
             
         self.mon = mon
-        self.n = n
-        
-        
-            
-        
+        self.n = n 
         
     @property
     def array(self):
@@ -120,6 +128,36 @@ class W(Spider):
   
     def dagger(self):
         return type(self)(n=self.n, mon=not self.mon, norm = self.norm_factor != 1)
+    
+class W(Spider):
+    def __init__(self, n=1, m=2, down=False):
+        #self.norm_factor = 1.0 if not norm else 1/np.sqrt(n)
+        
+        #assert not down, "havent worked out tranpose yet"
+        
+        super().__init__(n, m, 0, name='W')
+        self.color = "black"
+        self.shape = "triangle_down" if down else "triangle_up"
+        
+        self.down = down
+        self.n = n
+        self.m = m
+        
+    @property
+    def array(self):
+        if not self.down:
+           
+            mat = w_mat(self.m, self.n)
+            return Tensor(Dim(2**self.m), Dim(2**self.n), mat)
+        
+        else: # flip (and then tranpose later)
+            mat = w_mat(self.n, self.m)
+            return Tensor(Dim(2**self.m), Dim(2**self.n), mat.transpose())
+        
+        
+           
+    def dagger(self):
+        return type(self)(n=self.m, m=self.n, down=not self.down)
     
     
 

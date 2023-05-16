@@ -27,13 +27,13 @@ def eval(diagram, round=True):
     #print(n, m, "\n")
     
     if round:
-        return np.round(t.array, 5).astype(complex).reshape(2**n, 2**m).transpose()
+        #return np.round(t.array, 5).astype(complex).reshape(2**n, 2**m).transpose()
+        return np.round(t.array, 5).reshape(2**m, 2**n)
     else:
-        return t.array.astype(complex).reshape(2**n, 2**m).transpose()
-    #return t.array.astype(float).reshape(dim, dim).transpose()
+        return t.array.reshape(2**m, 2**n)
     
     
 def eq(a, b, close=True):
-    return np.allclose(eval(a), eval(b))
+    return np.allclose(eval(a, round=False), eval(b, round=False))
     
 
