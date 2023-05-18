@@ -130,8 +130,8 @@ class W_old(Spider):
         return type(self)(n=self.n, mon=not self.mon, norm = self.norm_factor != 1)
     
 class W(Spider):
-    def __init__(self, n=1, m=2, down=False):
-        #self.norm_factor = 1.0 if not norm else 1/np.sqrt(n)
+    def __init__(self, n=1, m=2, down=False, norm=False):
+        self.norm_factor = 1.0 if not norm else np.sqrt(n)/np.sqrt(m)
         
         #assert not down, "havent worked out tranpose yet"
         
@@ -147,12 +147,12 @@ class W(Spider):
     def array(self):
         if not self.down:
            
-            mat = w_mat(self.m, self.n)
-            return Tensor(Dim(2**self.m), Dim(2**self.n), mat)
+            mat = w_mat(self.m, self.n) * self.norm_factor
+            return Tensor(Dim(2)**self.n, Dim(2)**self.m, mat.transpose())
         
         else: # flip (and then tranpose later)
-            mat = w_mat(self.n, self.m)
-            return Tensor(Dim(2**self.m), Dim(2**self.n), mat.transpose())
+            mat = w_mat(self.n, self.m) * self.norm_factor
+            return Tensor(Dim(2)**self.m, Dim(2)**self.n, mat.transpose())
         
         
            

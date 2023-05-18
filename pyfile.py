@@ -28,9 +28,9 @@ def eval(diagram, round=True):
     
     if round:
         #return np.round(t.array, 5).astype(complex).reshape(2**n, 2**m).transpose()
-        return np.round(t.array, 5).reshape(2**m, 2**n)
+        return np.round(t.array, 5).reshape(2**n, 2**m).transpose()
     else:
-        return t.array.reshape(2**m, 2**n)
+        return t.array.reshape(2**n, 2**m).transpose()
     
     
 def eq(a, b, close=True):
