@@ -152,7 +152,7 @@ class W(Spider):
         
         else: # flip (and then tranpose later)
             mat = w_mat(self.n, self.m) * self.norm_factor
-            return Tensor(Dim(2)**self.m, Dim(2)**self.n, mat.transpose())
+            return Tensor(Dim(2)**self.n, Dim(2)**self.m, mat)
         
         
            
